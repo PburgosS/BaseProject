@@ -25,6 +25,7 @@ const createRegion = async (req, res) => {
     }
 }
 
+
 module.exports = {
     createRegion
 }
