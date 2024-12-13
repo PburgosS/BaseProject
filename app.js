@@ -4,7 +4,7 @@ const cors = require('cors');
 const bodyparser = require('body-parser');
 const app = express();
 const bodyParser = require('body-parser');
-const { home, country } = require('./src/routes');
+const { home, country, region, commune } = require('./src/routes');
 
 //CONFIGURACIONES PRIMERO
 app.use(cors());
@@ -15,5 +15,7 @@ app.use(bodyParser.json());
 //RUTAS
 app.use('/home', home);
 app.use(`/${process.env.API_VER}/country`, country);
+app.use(`/${process.env.API_VER}/region`, region);
+app.use(`/${process.env.API_VER}/commune`, commune);
 
 module.exports = app;

@@ -9,7 +9,7 @@ const createRegion = async (req, res) => {
         countryLink : countryLink
     });
     try {
-        await createdRegion.send();
+        await createdRegion.save();
         res.status(200).send({msg : "Region agregada correctamente"});
     } catch (error) {
         if(error instanceof Errors){
