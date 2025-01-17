@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const permissonController = require('../../controllers/permissonController');
 
-router.post('/permisson/createPermisson',permissonController.createPermisson);
-router.post('/permisson/getAllPermissons', permissonController.getAllPermissons);
+router.post('/createPermisson',permissonController.createPermisson);
+router.post('/getAllPermissons', permissonController.getAllPermissons);
 
 module.exports = router;

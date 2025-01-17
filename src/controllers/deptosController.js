@@ -2,15 +2,15 @@ const deptosModel = require('../models/deptosModel');
 const Errors = require('../errors/errors');
 
 const createDepto = (req, res) =>{
-    const { costCenterCode, costCenterName, costCenterNom } = req.body;
-    const createDepto = new deptosModel({
-        costCenterCode : costCenterCode,
-        costCenterName : costCenterName,
-        costCenterNom : costCenterNom.toUpperCase()
+    const { deptoCode, deptoName, deptoNom } = req.body;
+    const createdDepto = new deptosModel({
+        deptoCode : deptoCode,
+        deptoName : deptoName,
+        deptoNom : deptoNom.toUpperCase()
     });
     try {
-        createDepto.save();
-        res.status(200).send(createDepto);
+        createdDepto.save();
+        res.status(200).send(createdDepto);
     } catch (error) {
         if(error instanceof Errors){
             res.status(error.code).send(error.getMessage());

@@ -5,6 +5,13 @@ const user = require('./user');
 const country = require('./country');
 const region = require('./region');
 const commune = require('./commune');
+const subdepto = require('./subdepto');
+const auth = require('./auth');
+const subdeptoProcess = require('./subdeptoProcess');
+const action = require('./action');
+const view = require('./view');
+const request = require('./request');
+const upload = require('./upload');
 
 module.exports = {
     home,
@@ -13,5 +20,12 @@ module.exports = {
     user,
     country,
     region,
-    commune
+    commune,
+    subdepto,
+    auth,
+    subdeptoProcess,
+    action,
+    view,
+    request,
+    upload
 }

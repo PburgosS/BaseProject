@@ -1,24 +1,23 @@
-const Errors = require('../errors/errors');
-const getHome = async (req, res) =>{
+const log4 = require('log4js');
+const logger = log4.getLogger('homeController.js');
+logger.level = 'all';
+
+const homeModel = require('../models/homeModel');
+
+const homeRedirect = (req, res) => {
+    let userData;
+    const emptySave = new homeModel({});
     try {
-        if(1 == 0){
-            console.log('controller ERROR');
-            throw new Errors(402,'falso es igual a falso')
-        }
+        emptySave.save();
+        logger.info('Correcto');
+        userData = req.user
+        res.status(200).send(userData);
     } catch (error) {
-        console.log('controller ERROR ENVIADO');
-        if(error instanceof Errors){
-            res.status(error.code).send(error.getMessage());
-        }else{
-            const msg = {
-                'code' : 500,
-                'message' : error.message
-            }
-            res.status(500).json(msg);
-        }
+        logger.error('No encontrado');
+        res.status(404).send({msg : "Not Found"});
     }
 }
 
 module.exports = {
-    getHome
+    homeRedirect
 }

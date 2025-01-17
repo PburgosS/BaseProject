@@ -15,24 +15,20 @@ const userSchema = mongoose.Schema({
         unique: true,
         require: true
     },
-    role:{
-        type: String,
-        require : true
-    },
     permisson: {
-        code: String,
-        namePermisson: String
+        permissonCode: String,
+        permissonName: String
     },
     active:{
         type: Boolean,
         default: false
     },
     password: String,
-    costCenter : {
+    depto : {
         type:mongoose.Schema.Types.ObjectId,
-        ref : 'costCenter'
+        ref : 'deptos'
     },
-    subDepto : [{
+    subdepto : [{
         type:mongoose.Schema.Types.ObjectId,
         ref : 'subDepto'
     }],
