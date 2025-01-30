@@ -1,5 +1,14 @@
 First
-Use the command npm install to install all the dependencies.
+
+You need Windows System Operative
+Download and Install all updates of January 2025.
+
+Now Dowload NODE JS version 18.20.6
+
+Download GIT Version 2.47.1
+
+
+Now use the command npm install to install all the dependencies.
 
 Create a .env file in the root folder and add the following variables:
 
