@@ -5,15 +5,9 @@ const logger = log4.getLogger('viewsController.js');
 logger.level = 'all';
 
 const createViewData = async (req, res) => {
-    const { viewName, frontPath, permissonCode, actionLink } = req.body;
-    const createdViewData = new viewsModel({
-        viewName : viewName,
-        frontPath : frontPath,
-        viewPermisson:permissonCode,
-        actionLink : actionLink
-    });
+    const body = req.body;
     try {
-        await createdViewData.save();
+        await viewsModel.insertMany(body);
         res.status(200).send({msg : "Datos de vista creados correctamente"});
     } catch (error) {
         if(error instanceof Errors){

@@ -2,13 +2,9 @@ const subdeptoModel = require('../models/subdeptoModel');
 const Errors = require('../errors/errors');
 
 const createSubdepto = async (req, res) => {
-    const { subdeptoName, deptoLink } = req.body;
-    const createdSubdepto = new subdeptoModel({
-        subdeptoName : subdeptoName, 
-        deptoLink : deptoLink
-    })
+    const body = req.body;
     try {
-        await createdSubdepto.save();
+        await subdeptoModel.insertMany(body);
         res.status(200).send({msg : "subdepartamento creado correctamente"});
     } catch (error) {
         if(error instanceof Errors){

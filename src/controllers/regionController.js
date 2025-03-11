@@ -2,14 +2,9 @@ const regionModel = require('../models/regionModel');
 const Errors = require('../errors/errors');
 
 const createRegion = async (req, res) => {
-    const { regionName, regionISOCode, countryLink } = req.body;
-    const createdRegion = new regionModel({
-        regionName : regionName,
-        regionISOCode : regionISOCode,
-        countryLink : countryLink
-    });
+    const body = req.body;
     try {
-        await createdRegion.save();
+        await regionModel.insertMany(body);
         res.status(200).send({msg : "Region agregada correctamente"});
     } catch (error) {
         if(error instanceof Errors){

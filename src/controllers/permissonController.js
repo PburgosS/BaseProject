@@ -1,15 +1,10 @@
 const permissonModel = require('../models/permissonModel');
 const Errors = require('../errors/errors');
 
-const createPermisson = (req, res) => {
-    const { permissonCode, permissonName, postName } = req.body;
-    const addPermisson = new permissonModel({
-        permissonCode: permissonCode,
-        permissonName: permissonName,
-        postName: postName
-    });
+const createPermisson = async (req, res) => {
+    const body = req.body;
     try {
-        addPermisson.save();
+        await permissonModel.insertMany(body);
         res.status(200).send({msg : "Permiso creado correctamente"});
     } catch (error) {
         if(error instanceof Errors){

@@ -1,16 +1,11 @@
 const deptosModel = require('../models/deptosModel');
 const Errors = require('../errors/errors');
 
-const createDepto = (req, res) =>{
-    const { deptoCode, deptoName, deptoNom } = req.body;
-    const createdDepto = new deptosModel({
-        deptoCode : deptoCode,
-        deptoName : deptoName,
-        deptoNom : deptoNom.toUpperCase()
-    });
+const createDepto = async (req, res) =>{
+    const body = req.body;
     try {
-        createdDepto.save();
-        res.status(200).send(createdDepto);
+        await deptosModel.insertMany(body)
+        res.status(200).send({msg : 'Departamento creado correctamente'});
     } catch (error) {
         if(error instanceof Errors){
             res.status(error.code).send(error.getMessage());

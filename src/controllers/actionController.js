@@ -1,16 +1,13 @@
 const actionModel = require('../models/actionModel');
+const Errors = require('../errors/errors');
 const log4 = require('log4js');
 const logger = log4.getLogger("actionController.js");
 logger.level = "all";
 
 const createAction = async (req, res) => {
-    const { actionName, processLink } = req.body;
+    const body = req.body;
     try {
-        const createdAction = new actionModel({
-            actionName : actionName,
-            processLink : processLink
-        });
-        await createdAction.save();
+        await actionModel.insertMany(body);
         res.status(200).send({msg : "Accion creada correctamente"});
     } catch (error) {
         if(error instanceof Errors){

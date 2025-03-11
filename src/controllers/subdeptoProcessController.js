@@ -5,13 +5,9 @@ const logger = log4.getLogger('subdeptoProcessController');
 logger.level = 'all';
 
 const createSubdeptoProcess = async (req, res) => {
-    const { subdeptoProcessName, subdeptoLink } = req.body;
-    const createdSubdeptoProcess = new subdeptoProcessModel({
-        subdeptoProcessName: subdeptoProcessName,
-        subdeptoLink: subdeptoLink
-    });
-    await createdSubdeptoProcess.save();
+    const body = req.body;
     try {
+        await subdeptoProcessModel.insertMany(body);
         res.status(200).send({msg : "Funcion de Subdepatamento creada y asignada correctamente"});
     } catch (error) {
         if(error instanceof Errors){
