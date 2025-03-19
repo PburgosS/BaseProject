@@ -3,8 +3,17 @@ const Errors = require('../errors/errors');
 
 const createDepto = async (req, res) =>{
     const body = req.body;
+    const deptosData = [];
     try {
-        await deptosModel.insertMany(body)
+        for(let i = 0; i < body.length; i++){
+            let createdDepto = new deptosModel({
+                deptoCode : body[i].deptoCode,
+                deptoName : body[i].deptoName,
+                deptoNom :body[i]. deptoNom
+            });
+            deptosData.push(createdDepto);
+        }
+        await Promise.all(deptosData.map(depto => depto.save()));
         res.status(200).send({msg : 'Departamento creado correctamente'});
     } catch (error) {
         if(error instanceof Errors){

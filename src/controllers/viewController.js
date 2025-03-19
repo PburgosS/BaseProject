@@ -6,8 +6,18 @@ logger.level = 'all';
 
 const createViewData = async (req, res) => {
     const body = req.body;
+    const viewData = [];
     try {
-        await viewsModel.insertMany(body);
+        for(let i = 0; i < body.length; i++){
+            let createdView = new viewsModel({
+                viewName : body[i].viewName,
+                frontPath : body[i].frontPath,
+                viewPermisson : body[i].viewPermisson,
+                actionLink : body[i].actionLink
+            });
+            viewData.push(createdView);
+        }
+        await Promise.all(viewData.map(view => view.save()));
         res.status(200).send({msg : "Datos de vista creados correctamente"});
     } catch (error) {
         if(error instanceof Errors){

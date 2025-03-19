@@ -6,8 +6,17 @@ logger.level = 'all';
 
 const registerCommune = async (req, res) => {
     const body = req.body;
+    const communeData = [];
     try {
-        await communeModel.insertMany(body);
+        for(let i = 0; i < body.length; i++){
+            let createdCommune = new communeModel({
+                communeName : body[i].communeName,
+                communeLocode : body[i].communeLocode,
+                regionLink : body[i].regionLink
+            });
+            communeData.push(createdCommune);
+        }
+        await Promise.all(communeData.map(commune => commune.save()));
         res.status(200).send({msg : "Comuna registrada correctamente"});
     } catch (error) {
         if(error instanceof Errors){

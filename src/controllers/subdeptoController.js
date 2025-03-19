@@ -3,8 +3,16 @@ const Errors = require('../errors/errors');
 
 const createSubdepto = async (req, res) => {
     const body = req.body;
+    let subdeptoData = [];
     try {
-        await subdeptoModel.insertMany(body);
+        for(let i = 0; i < body.length; i++){
+            let createdSubdepto = new subdeptoModel({
+                subdeptoName : body[i].subdeptoName,
+                deptoLink : body[i].deptoLink
+            });
+            subdeptoData.push(createdSubdepto);
+        }
+        await Promise.all(subdeptoData.map(subdepto => subdepto.save()));
         res.status(200).send({msg : "subdepartamento creado correctamente"});
     } catch (error) {
         if(error instanceof Errors){

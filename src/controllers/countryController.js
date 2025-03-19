@@ -6,8 +6,16 @@ logger.level = 'all';
 
 const createCountry = async (req, res) => {
     const body = req.body;
+    const countryData = [];
     try {
-        await countryModel.insertMany(body);
+        for(let  i = 0; i < body.length; i++){
+            let createdCountry = new countryModel({
+                countryName : body[i].countryName,
+                countryIataCode : body[i].countryIataCode,
+            });
+            countryData.push(createdCountry);
+        }
+        await Promise.all(countryData.map(country => country.save()));
         res.status(200).send({msg : "Pais Agregado correctamente"});
     } catch (error) {
         if(error instanceof Errors){

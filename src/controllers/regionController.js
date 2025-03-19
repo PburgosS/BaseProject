@@ -3,8 +3,17 @@ const Errors = require('../errors/errors');
 
 const createRegion = async (req, res) => {
     const body = req.body;
+    const regionData = [];
     try {
-        await regionModel.insertMany(body);
+        for(let i = 0; i < body.length; i++){
+            let createdRegion = new regionModel({
+                regionName : body[i].regionName,
+                regionISOCode : body[i].regionISOCode,
+                countryLink : body[i].countryLink
+            });
+            regionData.push(createRegion);
+        }
+        await Promise.all(regionData.map(region => region.save()));
         res.status(200).send({msg : "Region agregada correctamente"});
     } catch (error) {
         if(error instanceof Errors){
@@ -19,7 +28,6 @@ const createRegion = async (req, res) => {
         }
     }
 }
-
 
 module.exports = {
     createRegion

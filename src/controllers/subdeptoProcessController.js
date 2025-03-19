@@ -6,8 +6,16 @@ logger.level = 'all';
 
 const createSubdeptoProcess = async (req, res) => {
     const body = req.body;
+    const subdeptoProcessData = [];
     try {
-        await subdeptoProcessModel.insertMany(body);
+        for(let i = 0; i < body.length; i++){
+            let createdSubdeptoPrcess = new subdeptoProcessModel({
+                subdeptoProcessName : body[i].subdeptoProcessName,
+                subdeptoLink : body[i].subdeptoLink
+            });
+            subdeptoProcessData.push(createdSubdeptoPrcess);
+        }
+        await Promise.all(subdeptoProcessData.map(subdeptoProcess => subdeptoProcess.save()));
         res.status(200).send({msg : "Funcion de Subdepatamento creada y asignada correctamente"});
     } catch (error) {
         if(error instanceof Errors){

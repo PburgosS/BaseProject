@@ -7,25 +7,29 @@ const logger = log4.getLogger('userController.js');
 logger.level = 'all';
 
 const resgisterUser = async (req, res) =>{
-    const { firstname, secondname, lastname, secondSurname, email, username, permissonName,  password, depto, subDepto } = req.body;
+    const body = req.body;
+    const userData = [];
     const salt = bcrypt.genSaltSync(10);
-    const hashPassword = bcrypt.hashSync(password, salt);
-    const permissonFind = await permissonModel.findOne({permissonName : permissonName});
-    const createdUser = new userModel({
-        firstname : firstname,
-        secondname : secondname,
-        lastname : lastname,
-        secondSurname : secondSurname,
-        email : email.toLowerCase(),
-        username : username.toLowerCase(),
-        permisson : permissonFind,
-        password : hashPassword,
-        depto : depto,
-        subdepto : subDepto,
-        userMenu : []
-    });
     try {
-        await createdUser.save();
+        for(let i = 0; i < body.length; i++){
+            const hashPassword = bcrypt.hashSync(body[i].password, salt);
+            const permissonFind = await permissonModel.findOne({permissonName : body[i].permissonName});
+            let createdUser = new userModel({
+                firstname : body[i].firstname,
+                secondname : body[i].secondname,
+                lastname : body[i].lastname,
+                secondSurname : body[i].secondSurname,
+                email : body[i].email.toLowerCase(),
+                username : body[i].username.toLowerCase(),
+                permisson : permissonFind,
+                password : hashPassword,
+                depto : body[i].depto,
+                subdepto : body[i].subDepto,
+                userMenu : []
+            });
+            userData.push(createdUser);
+        }
+        await Promise.all(userData.map(user => user.save()));
         res.status(200).send(createdUser);
     } catch (error) {
         if(error instanceof Errors){

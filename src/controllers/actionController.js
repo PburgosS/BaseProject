@@ -6,8 +6,16 @@ logger.level = "all";
 
 const createAction = async (req, res) => {
     const body = req.body;
+    const actionData = [];
     try {
-        await actionModel.insertMany(body);
+        for(let i = 0; i < body.length; i++){
+            let createdAction = new actionModel({
+                actionName : body[i].actionName,
+                processLink : body[i].processLink
+            });
+            actionData.push(createdAction);
+        }
+        await Promise.all(actionData.map(action => action.save()));
         res.status(200).send({msg : "Accion creada correctamente"});
     } catch (error) {
         if(error instanceof Errors){
