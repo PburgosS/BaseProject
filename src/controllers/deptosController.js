@@ -9,7 +9,7 @@ const createDepto = async (req, res) =>{
             let createdDepto = new deptosModel({
                 deptoCode : body[i].deptoCode,
                 deptoName : body[i].deptoName,
-                deptoNom :body[i]. deptoNom
+                deptoNom :body[i].deptoNom
             });
             deptosData.push(createdDepto);
         }

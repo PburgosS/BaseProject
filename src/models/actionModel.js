@@ -2,11 +2,11 @@ const mongoose = require('mongoose');
 const actionSchema = mongoose.Schema({
     actionName : {
         type : String,
-        require : true
+        required : true
     },
     processLink : {
         type : mongoose.Schema.Types.ObjectId,
-        require : true,
+        required : true,
         ref : 'subdeptoProcess'
     }
 });

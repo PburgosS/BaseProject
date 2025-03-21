@@ -2,13 +2,13 @@ const mongoose = require('mongoose');
 
 const subdeptoProcessSchema = mongoose.Schema({
     subdeptoProcessName:{
-        type: String,
-        require: true
+        type : String,
+        required : true
     },
     subdeptoLink:{
-        type: mongoose.Schema.Types.ObjectId,
-        require: true,
-        ref:'subdeptos'
+        type : mongoose.Schema.Types.ObjectId,
+        required : true,
+        ref : 'subdeptos'
     }
 });
 module.exports = mongoose.model('subdeptoProcess', subdeptoProcessSchema);

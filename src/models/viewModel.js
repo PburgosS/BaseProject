@@ -1,19 +1,19 @@
 const mongoose = require('mongoose');
 
 const viewSchema = mongoose.Schema({
-    viewName: {
-        type: String,
-        unique: true,
-        require: true
+    viewName : {
+        type : String,
+        unique : true,
+        required : true
     },
     frontPath:{
-        type: String,
-        unique: true,
-        require: true
+        type : String,
+        unique : true,
+        required : true
     },
     viewPermisson:{
-        type: String,
-        require: true,
+        type : String,
+        required : true,
     },
     actionLink : {
         type : mongoose.Schema.Types.ObjectId,
