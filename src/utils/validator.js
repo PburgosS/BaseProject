@@ -44,7 +44,8 @@ const validateDeptoNomStructure = (deptoNom) => {
     }
 }
 const validateIsArray = (array, fieldName) => {
-    if(array.isArray == false){
+    logger.warn(Array.isArray(array));
+    if(Array.isArray(array) === false){
         throw new Error(`${fieldName} must be a Array`);
     }
 }
@@ -94,7 +95,7 @@ const validateDate = (date, fieldName) => {
     }
 }
 const validateTaxDocument = (taxDocument, fieldName) => {
-    if(/^[0-9.]+$/i.test(taxDocument)){
+    if(!/^[0-9]+$/i.test(taxDocument)){
         throw new Error(`${fieldName} must contain characters from 0-9 and .`);
     }
 }
