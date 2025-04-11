@@ -1,18 +1,27 @@
 const subdeptoModel = require('../models/subdeptoModel');
+const validator = require('../utils/validator');
 const Errors = require('../errors/errors');
 
 const createSubdepto = async (req, res) => {
-    const body = req.body;
+    const registerCounter = Object.keys(req.body).length;
     let subdeptoData = [];
     try {
-        for(let i = 0; i < body.length; i++){
-            let createdSubdepto = new subdeptoModel({
-                subdeptoName : body[i].subdeptoName,
-                deptoLink : body[i].deptoLink
+        for(let i = 0; i < registerCounter; i++){
+            const { subdeptoName, deptoLink } = req.body[i];
+            //Validation Subdepto Name
+            validator.validateIsString(subdeptoName, 'subdeptoName');
+            validator.validateStringWithNumberStructure(subdeptoName, 'subdeptoName');
+            validator.validateStringMaxLength(subdeptoName, 'subdeptoName');
+            //Validation Depto Link
+            validator.validateIsString(deptoLink, 'deptoLink');
+            validator.validateIDStructure(deptoLink, 'deptoLink');
+            const createdSubdepto = new subdeptoModel({
+                subdeptoName : subdeptoName,
+                deptoLink : deptoLink
             });
-            subdeptoData.push(createdSubdepto);
+            const subdepto = await createdSubdepto.save()
+            subdeptoData.push(subdepto);
         }
-        await Promise.all(subdeptoData.map(subdepto => subdepto.save()));
         res.status(200).send({msg : "subdepartamento creado correctamente"});
     } catch (error) {
         if(error instanceof Errors){
@@ -28,8 +37,9 @@ const createSubdepto = async (req, res) => {
     }
 }
 const viewAllSubdeptosOfDepto = async (req, res) => {
-    const { costCenterLink } = req.body;
-    const getSubDeptos = await subdeptoModel.find({deptoLink: costCenterLink}, '-__v -deptoLink');
+    const { deptoLink } = req.body;
+    validator.validateDeptoLink(deptoLink);
+    const getSubDeptos = await subdeptoModel.find({deptoLink: deptoLink}, '-__v -deptoLink');
     try {
         res.status(200).send(getSubDeptos);
     } catch (error) {

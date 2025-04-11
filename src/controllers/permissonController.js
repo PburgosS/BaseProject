@@ -1,19 +1,24 @@
 const permissonModel = require('../models/permissonModel');
+const validator = require('../utils/validator');
 const Errors = require('../errors/errors');
 
 const createPermisson = async (req, res) => {
-    const body = req.body;
+    const registerCounter = Object.keys(req.body).length;
     const permissonData = [];
     try {
-        for(let i = 0; i < body.length; i++){
-            let createdPermisson = new permissonModel({
-                permissonCode : body[i].permissonCode,
-                permissonName : body[i].permissonName,
-                postName : body[i].postName
+        for(let i = 0; i < registerCounter; i++){
+            const { permissonCode, permissonName, postName } = req.body[i];
+            validator.validatePermissonCode(permissonCode);
+            validator.validatePermissonName(permissonName);
+            validator.validatePostName(postName);
+            const createdPermisson = new permissonModel({
+                permissonCode : permissonCode,
+                permissonName : permissonName,
+                postName : postName
             });
-            permissonData.push(createdPermisson);
+            const permisson = await createdPermisson.save();
+            permissonData.push(permisson);
         }
-        await Promise.all(permissonData.map(permisson => permisson.save()));
         res.status(200).send({msg : "Permiso creado correctamente"});
     } catch (error) {
         if(error instanceof Errors){

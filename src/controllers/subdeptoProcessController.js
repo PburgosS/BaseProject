@@ -1,21 +1,29 @@
 const subdeptoProcessModel = require('../models/subdeptoProcessModel');
+const validator = require('../utils/validator');
 const Errors = require('../errors/errors');
 const log4 = require('log4js');
 const logger = log4.getLogger('subdeptoProcessController');
 logger.level = 'all';
 
 const createSubdeptoProcess = async (req, res) => {
-    const body = req.body;
+    const registerCounter = Object.keys(req.body).length;
     const subdeptoProcessData = [];
     try {
-        for(let i = 0; i < body.length; i++){
-            let createdSubdeptoPrcess = new subdeptoProcessModel({
-                subdeptoProcessName : body[i].subdeptoProcessName,
-                subdeptoLink : body[i].subdeptoLink
+        for(let i = 0; i < registerCounter; i++){
+            const { subdeptoProcessName, subdeptoLink } = req.body[i];
+            //Validations Subdepto Process Name
+            validator.validateIsString(subdeptoProcessName, 'subdeptoProcessName');
+            validator.validateStringNameStructure(subdeptoProcessName, 'subdeptoProcessName');
+            //Validations Subdepto Link
+            validator.validateIsString(subdeptoLink, 'subdeptoLink');
+            validator.validateIDStructure(subdeptoLink, 'subdeptoLink');
+            const createdSubdeptoProcess = new subdeptoProcessModel({
+                subdeptoProcessName : subdeptoProcessName,
+                subdeptoLink : subdeptoLink
             });
-            subdeptoProcessData.push(createdSubdeptoPrcess);
+            const subdeptoProcess = await createdSubdeptoProcess.save();
+            subdeptoProcessData.push(subdeptoProcess);
         }
-        await Promise.all(subdeptoProcessData.map(subdeptoProcess => subdeptoProcess.save()));
         res.status(200).send({msg : "Funcion de Subdepatamento creada y asignada correctamente"});
     } catch (error) {
         if(error instanceof Errors){
@@ -32,6 +40,8 @@ const createSubdeptoProcess = async (req, res) => {
 }
 const viewAllProcessOfSubdepto = async (req, res) => {
     const { subdeptoLink } = req.body;
+    validator.validateIsString(subdeptoLink, 'subdeptoLink');
+    validator.validateIDStructure(subdeptoLink, 'subdeptoLink');
     const getSubDeptoFunction = await subdeptoProcessModel.find({subdeptoLink :subdeptoLink},'-__v -subdeptoLink');
     try {
         res.status(200).send(getSubDeptoFunction)

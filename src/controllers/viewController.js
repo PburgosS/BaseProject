@@ -1,23 +1,39 @@
 const viewsModel = require('../models/viewModel');
+const validator = require('../utils/validator');
 const Errors = require('../errors/errors');
 const log4 = require('log4js');
 const logger = log4.getLogger('viewsController.js');
 logger.level = 'all';
 
 const createViewData = async (req, res) => {
-    const body = req.body;
+    const registerCounter = Object.keys(req.body).length;
     const viewData = [];
     try {
-        for(let i = 0; i < body.length; i++){
-            let createdView = new viewsModel({
-                viewName : body[i].viewName,
-                frontPath : body[i].frontPath,
-                viewPermisson : body[i].viewPermisson,
-                actionLink : body[i].actionLink
+        for(let i = 0; i < registerCounter; i++){
+            const { viewName, frontPath, viewPermisson, actionLink } = req.body[i];
+            //Validations View Name
+            validator.validateIsString(viewName, 'viewName');
+            validator.validateStringNameStructure(viewName, 'viewName');
+            validator.validateStringMaxLength(viewName, 'viewName');
+            //Validations Front Path
+            validator.validateIsString(frontPath, 'frontPath');
+            validator.validateFrontPath(frontPath, 'frontPath');
+            validator.validateStringMaxLength(frontPath, 'frontPath');
+            //Validations View Permisson
+            validator.validateIsString(viewPermisson, 'viewPermisson');
+            validator.validatePermissonCode(viewPermisson, 'viewPermisson');
+            //Validations Action Link
+            validator.validateIsString(actionLink, 'actionLink');
+            validator.validateIDStructure(actionLink, 'actionLink');
+            const createdView = new viewsModel({
+                viewName : viewName,
+                frontPath : frontPath,
+                viewPermisson : viewPermisson,
+                actionLink : actionLink
             });
-            viewData.push(createdView);
+            const view = await createdView.save();
+            viewData.push(view);
         }
-        await Promise.all(viewData.map(view => view.save()));
         res.status(200).send({msg : "Datos de vista creados correctamente"});
     } catch (error) {
         if(error instanceof Errors){
@@ -35,6 +51,7 @@ const createViewData = async (req, res) => {
 
 const deleteViewData = async (req, res) => {
     const { viewCode } = req.body;
+    validator.validateViewCode(viewCode);
     try {
         await viewsModel.deleteOne({_id:viewCode});
         res.status(200).send({msg : "Datos de vista eliminados correctamente"});

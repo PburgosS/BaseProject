@@ -1,6 +1,7 @@
 const requestModel = require('../models/requestModel');
 const deptoModel = require('../models/deptosModel');
 const Errors = require('../errors/errors');
+const validator = require('../utils/validator');
 const multer = require('multer');
 const fs = require('fs').promises;
 const path = require('path');
@@ -11,6 +12,20 @@ logger.level = 'all';
 const createRequest = async (req, res) => {
     try {
         const { requestor, requestDate, requestVia, statusName, requestStatusDate, prevStatusName, prevRequestStatusDate, finalUserName, finalUserDepto, finalUserSubDepto, requestorID } = req.body;
+        validator.validateRequestor(requestor);
+        validator.validateRequestDate(requestDate);
+        validator.validateRequestVia(requestVia);
+        //Validate Request Status Data
+        validator.validateStatusName(statusName);
+        validator.validateRequestDate(requestStatusDate);
+        //Validate Previous Request Status Data
+        validator.validateStatusName(prevStatusName);
+        validator.validateRequestDate(prevRequestStatusDate);
+        validator.validateFinalUserName(finalUserName);
+        validator.validateFinalUserDepto(finalUserDepto);
+        validator.validateFinalUserSubdepto(finalUserSubDepto);
+        validator.validateRequestorID(requestorID);
+
         let previousRequestStatusPushed = [];
         let requestItems = [];
         requestItems = req.body.requestItems

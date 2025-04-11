@@ -16,7 +16,14 @@ const { home,
         action,
         view,
         request,
-        upload
+        upload,
+        provider,
+        product,
+        productBrand,
+        productCategory,
+        receptionDocument,
+        productStatus,
+        productArrival
       } = require('./src/routes');
 
 //CONFIGURACIONES PRIMERO
@@ -40,6 +47,13 @@ app.use(`/${process.env.API_VER}/action`, action);
 app.use(`/${process.env.API_VER}/view`, view);
 app.use(`/${process.env.API_VER}/request`, request);
 app.use(`/${process.env.API_VER}/upload`, upload);
+app.use(`/${process.env.API_VER}/provider`, provider);
+app.use(`/${process.env.API_VER}/product`, product);
+app.use(`/${process.env.API_VER}/productBrand`, productBrand);
+app.use(`/${process.env.API_VER}/productCategory`, productCategory);
+app.use(`/${process.env.API_VER}/receptionDocument`, receptionDocument);
+app.use(`/${process.env.API_VER}/productStatus`, productStatus);
+app.use(`/${process.env.API_VER}/productArrival`, productArrival);
 
 //CONFIGURE UPLOAD FOLDER
 app.use(express.static('uploads'));
