@@ -8,9 +8,17 @@ const createPermisson = async (req, res) => {
     try {
         for(let i = 0; i < registerCounter; i++){
             const { permissonCode, permissonName, postName } = req.body[i];
-            validator.validatePermissonCode(permissonCode);
-            validator.validatePermissonName(permissonName);
-            validator.validatePostName(postName);
+            //Validate Permisson Code
+            validator.validateIsString(permissonCode, 'Permisson Code');
+            validator.validatePermissonCode(permissonCode, 'Permisson Code');
+            //Validate Permisson Name
+            validatorvalidateIsString(permissonName, 'Permisson Name');
+            validatorvalidateStringNameStructure(permissonName.trim(), 'Permisson Name');
+            validatorvalidateStringMaxLength(permissonName, 'Permisson Name');
+            //Validate Post Name
+            validatorvalidateIsString(postName, 'Permisson Post Name');
+            validatorvalidateStringNameStructure(postName.trim(), 'Permisson Post Name');
+            validatorvalidateStringMaxLength(postName, 'Permisson Post Name');
             const createdPermisson = new permissonModel({
                 permissonCode : permissonCode,
                 permissonName : permissonName,

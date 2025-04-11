@@ -7,7 +7,6 @@ logger.level = 'all';
 
 const registerCommune = async (req, res) => {
     const registerCounter = Object.keys(req.body).length;
-    const body = req.body;
     const communeData = [];
     try {
         for(let i = 0; i < registerCounter; i++){
