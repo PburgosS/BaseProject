@@ -1,4 +1,5 @@
 const productStatusModel = require('../models/productStatusModel');
+const validator = require('../utils/validator');
 const Errors = require('../errors/errors');
 
 const createProductStatus = async (req, res) => {
@@ -7,6 +8,9 @@ const createProductStatus = async (req, res) => {
     try {
         for(let i = 0; i < registerCounter; i++){
             const { productStatusName } = req.body[i];
+            validator.validateIsString(productStatusName, 'Product Status Name');
+            validator.validateStringNameStructure(productStatusName, 'Product Status Name');
+            validator.validateStringMaxLength(productStatusName, 'Product Status Name');
             let createdProductStatus = new productStatusModel({
                 productStatusName : productStatusName
             });
