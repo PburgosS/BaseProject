@@ -21,7 +21,6 @@ const { home,
         product,
         productBrand,
         productCategory,
-        receptionDocument,
         productStatus,
         productArrival
       } = require('./src/routes');
@@ -51,7 +50,6 @@ app.use(`/${process.env.API_VER}/provider`, provider);
 app.use(`/${process.env.API_VER}/product`, product);
 app.use(`/${process.env.API_VER}/productBrand`, productBrand);
 app.use(`/${process.env.API_VER}/productCategory`, productCategory);
-app.use(`/${process.env.API_VER}/receptionDocument`, receptionDocument);
 app.use(`/${process.env.API_VER}/productStatus`, productStatus);
 app.use(`/${process.env.API_VER}/productArrival`, productArrival);
 

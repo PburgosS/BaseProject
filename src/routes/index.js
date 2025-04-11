@@ -16,7 +16,6 @@ const provider = require('./provider');
 const product = require('./product');
 const productBrand = require('./productBrand');
 const productCategory = require('./productCategory');
-const receptionDocument = require('./receptionDocument');
 const productStatus = require('./productStatus');
 const productArrival = require('./productArrival');
 
@@ -39,7 +38,6 @@ module.exports = {
     product,
     productBrand,
     productCategory,
-    receptionDocument,
     productStatus,
     productArrival
 }
