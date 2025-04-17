@@ -1,6 +1,8 @@
 const requestModel = require('../models/requestModel');
 const deptoModel = require('../models/deptosModel');
+const productModel = require('../models/productModel');
 const Errors = require('../errors/errors');
+const validator = require('../utils/validator');
 const multer = require('multer');
 const fs = require('fs').promises;
 const path = require('path');
@@ -10,24 +12,63 @@ logger.level = 'all';
 
 const createRequest = async (req, res) => {
     try {
-        const { requestor, requestDate, requestVia, statusName, requestStatusDate, prevStatusName, prevRequestStatusDate, finalUserName, finalUserDepto, finalUserSubDepto, requestorID } = req.body;
-        let previousRequestStatusPushed = [];
-        let requestItems = [];
-        requestItems = req.body.requestItems
+        const { requestor, requestDate, requestVia, requestItems , statusName, requestStatusDate, finalUserName, finalUserDepto, finalUserSubDepto, requestorID } = req.body;
+        const itemsRequested = [];
+        for(let i = 0; i < requestItems.length; i++){
+            const { product, quantity } = requestItems[i];
+            //Validate Product
+            validator.validateIsString(product, 'Product');
+            validator.validateIDStructure(product, 'Product');
+            //Validate Product Quantity
+            validator.validateNumber(quantity, 'Quantity');
+            validator.validateMaxNumber(quantity, 'Quantity');
+            const productList = {
+                product : product,
+                quantity : quantity
+            };
+            itemsRequested.push(productList);
+        }
+        //Validate Requestor
+        validator.validateIsString(requestor, 'Requestor');
+        validator.validateStringNameStructure(requestor, 'Requestor');
+        validator.validateStringMaxLength(requestor, 'Requestor');
+        //Validate Request Date
+        validator.validateIsString(requestDate, 'Request Date');
+        validator.validateDate(requestDate, 'Request Date');
+        //Validate Request Via
+        validator.validateIsString(requestVia, 'Request Via');
+        validator.validateStringNameStructure(requestVia, 'Request Via');
+        validator.validateStringMaxLength(requestVia, 'Request Via');
+        //Validate StatusName
+        validator.validateIsString(statusName, 'Status Name');
+        validator.validateStringNameStructure(statusName, 'Status Name');
+        validator.validateStringMaxLength(statusName, 'Status Name');
+        //Validate Request Status Date
+        validator.validateIsString(requestStatusDate, 'Request Status Date');
+        validator.validateDate(requestStatusDate, 'Request Status Date');
+        //Validate Final User Name
+        validator.validateIsString(finalUserName, 'Final User Name');
+        validator.validateStringNameStructure(finalUserName, 'Final User Name');
+        validator.validateStringMaxLength(finalUserName, 'Final User Name');
+        //Validate Final User Depto
+        validator.validateIsString(finalUserDepto, 'Final User Depto');
+        validator.validateIDStructure(finalUserDepto, 'Final User Depto');
+        //Validate Final User Subdepto
+        validator.validateIsString(finalUserSubDepto, 'Final User Subdepto');
+        validator.validateIDStructure(finalUserSubDepto, 'Final User Subdepto');
+        //Validator Requestor ID
+        validator.validateIsString(requestorID, 'Requestor ID');
+        validator.validateIDStructure(requestorID, 'Requestor ID');
+
         const requestStatus = {
             statusName : statusName,
             requestStatusDate : requestStatusDate
         };
-        const previousRequestStatus = {
-            prevStatusName : prevStatusName,
-            prevRequestStatusDate :prevRequestStatusDate
-        };
-        previousRequestStatusPushed.push(previousRequestStatus);
         const finalUserDeptoCode = await deptoModel.find({_id : finalUserDepto},'-_id -__v -costCenterNom -costCenterName');
         const finalUser = {
             finalUserName : finalUserName,
             finalUserDepto : finalUserDepto,
-            finalUserDeptoCode : finalUserDeptoCode[0].costCenterCode,
+            finalUserDeptoCode : finalUserDeptoCode[0].deptoCode,
             finalUserSubDepto : finalUserSubDepto
         };
         const lastDocument = await requestModel.find().sort({$natural : -1}).limit(1);
@@ -42,11 +83,11 @@ const createRequest = async (req, res) => {
         }
         const createdRequest = new requestModel({
             requestor: requestor,
-            requestItems : requestItems,
+            requestItems : itemsRequested,
             requestDate: requestDate,
             requestVia : requestVia,
             requestStatus : requestStatus,
-            previousRequestStatus : previousRequestStatusPushed,
+            previousRequestStatus : [],
             finalUser : finalUser,
             requestID : requestIdData,
             requestorID : requestorID
@@ -194,11 +235,15 @@ const getOwnRequests = async (req, res) => {
         }
     }
 }
+
+
+
 const getSpecificRequestData = async (req, res) => {
     try {
         const { requestID } = req.body;
         let quotations;
-        const specificRequest = await requestModel.find({ requestID : requestID }, {'requestStatus.statusName' : {$ne : 'Cerrado'}});
+        const specificRequest = await requestModel.find({ requestID : requestID });
+        console.log(specificRequest);
         const finalUserDepto = await deptoModel.find({ _id : specificRequest[0].finalUser.finalUserDepto.toString() }, '-__v -_id');
         let dataRequest = {
             id : specificRequest[0]._id,
@@ -229,6 +274,55 @@ const getSpecificRequestData = async (req, res) => {
         }
     }
 }
+
+
+
+// const getSpecificRequestData = async (req, res) => {
+//     try {
+//         const { requestID } = req.body;
+//         let itemasNameList = [];
+//         let quotations;
+//         const specificRequest = await requestModel.find({ requestID : requestID });
+//         console.log(specificRequest);
+//         const finalUserDepto = await deptoModel.find({ _id : specificRequest[0].finalUser.finalUserDepto.toString() }, '-__v -_id');
+//         for(let i = 0; i < specificRequest[0].requestItems.length; i++){
+//             const productID = specificRequest[0].requestItems[i].product;
+//             const itemsNames = await productModel.find({_id: productID}, '-_id -description -productBrandLink -productCategoryLink -__v');
+//             const productsQuantity = {
+//                 model : itemsNames[0].model,
+//                 quantity : specificRequest[0].requestItems[i].quantity
+//             }
+//             itemasNameList.push(productsQuantity);
+//         }
+//         let dataRequest = {
+//             id : specificRequest[0]._id,
+//             requestor: specificRequest[0].requestor,
+//             requestItems: itemasNameList,
+//             requestDate: specificRequest[0].requestDate,
+//             requestVia : specificRequest[0].requestVia,
+//             requestStatus : specificRequest[0].requestStatus,
+//             previousRequestStatus : specificRequest[0].previousRequestStatus,
+//             finalUser : {
+//                 finalUserName : specificRequest[0].finalUser.finalUserName,
+//                 finalUserDepto : finalUserDepto[0].deptoName
+//             },
+//             requestID : specificRequest[0].requestID,
+//             requestorID : specificRequest[0].requestorID
+//         }
+//         res.status(200).send(dataRequest);
+//     } catch (error) {
+//         if(error instanceof Errors){
+//             res.status(error.code).send(error.getMessage());
+//         }
+//         else{
+//             const msg = {
+//                 'code' : 500,
+//                 'message' : error.message
+//             }
+//             res.status(500).send(msg);
+//         }
+//     }
+// }
 const updateRequestStatus = async (req, res) => {
     try {
         const { id, statusName, requestStatusDate } = req.body;

@@ -2,19 +2,19 @@ const mongoose = require('mongoose');
 
 const permissonSchema = mongoose.Schema({
     permissonCode: {
-        type: String,
-        require: true,
-        unique:true
+        type : String,
+        required : true,
+        unique : true
     },
     permissonName: {
-        type: String,
-        require: true,
-        unique: true
+        type : String,
+        required : true,
+        unique : true
     },
     postName : {
-        type: String,
-        require: true,
-        unique: true
+        type : String,
+        required : true,
+        unique : true
     }
 });
 

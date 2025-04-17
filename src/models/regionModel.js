@@ -4,16 +4,16 @@ const regionSchema = mongoose.Schema({
     regionName : {
         type: String,
         unique : true,
-        require : true
+        required : true
     },
     regionISOCode : {
         type : String,
         unique : true,
-        require : true
+        required : true
     },
     countryLink : {
         type: mongoose.Schema.Types.ObjectId,
-        require : true,
+        required : true,
         ref : 'countries'
     }
 });

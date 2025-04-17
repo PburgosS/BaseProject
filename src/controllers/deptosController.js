@@ -1,16 +1,32 @@
 const deptosModel = require('../models/deptosModel');
+const validator = require('../utils/validator');
 const Errors = require('../errors/errors');
 
-const createDepto = (req, res) =>{
-    const { deptoCode, deptoName, deptoNom } = req.body;
-    const createdDepto = new deptosModel({
-        deptoCode : deptoCode,
-        deptoName : deptoName,
-        deptoNom : deptoNom.toUpperCase()
-    });
+const createDepto = async (req, res) =>{
+    const registerCounter = Object.keys(req.body).length;
+    const deptosData = [];
     try {
-        createdDepto.save();
-        res.status(200).send(createdDepto);
+        for(let i = 0; i < registerCounter; i++){
+            const { deptoCode, deptoName, deptoNom } = req.body[i];
+            //Validate Depto Code
+            validator.validateIsString(deptoCode, 'deptoCode');
+            validator.validateDeptoCode(deptoCode, 'deptoCode');
+            //Validate Depto Name
+            validator.validateIsString(deptoName, 'deptoName');
+            validator.validateStringNameStructure(deptoName, 'deptoName');
+            validator.validateStringMaxLength(deptoName, 'deptoName');
+            //Validate Depto Nom
+            validator.validateIsString(deptoNom, 'deptoNom');
+            validator.validateDeptoNomStructure(deptoNom);
+            const createdDepto = new deptosModel({
+                deptoCode : deptoCode,
+                deptoName : deptoName,
+                deptoNom :deptoNom
+            });
+            const depto = await createdDepto.save();
+            deptosData.push(depto);
+        }
+        res.status(200).send({msg : 'Departamento creado correctamente'});
     } catch (error) {
         if(error instanceof Errors){
             res.status(error.code).send(error.getMessage());
