@@ -1,6 +1,7 @@
 const productModel = require('../models/productModel');
 const productBrandModel = require('../models/productBrandModel');
-const productCategoryModel = require('../models/productCategoryModel')
+const productCategoryModel = require('../models/productCategoryModel');
+const validator = require('../utils/validator');
 const Errors = require('../errors/errors');
 
 const createProduct = async (req, res) => {
@@ -75,6 +76,8 @@ const getAllProductData = async (req, res) => {
 }
 async function brandFilterProduct(req, res){
     const { brandFilter } = req.body;
+    validator.validateIsString(brandFilter, 'Product Brand Filter');
+    validator.validateIDStructure(brandFilter, 'Product Brand Filter');
     try {
         let data = [];
         const productData = await productModel.find({ productBrandLink: brandFilter });
@@ -105,6 +108,8 @@ async function brandFilterProduct(req, res){
 }
 async function categoryFilterProduct(req, res){
     const { categoryFilter } = req.body;
+    validator.validateIsString(categoryFilter, 'Product Category Filter');
+    validator.validateIDStructure(categoryFilter, 'Product Category Filter');
     try {
         let data = [];
         const productData = await productModel.find({ productCategoryLink: categoryFilter });

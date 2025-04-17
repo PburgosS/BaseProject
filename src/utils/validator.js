@@ -106,7 +106,17 @@ const validateRUT = (rut, fieldName) => {
 }
 const validateTelephone = (telephone, fieldName) => {
     if(!/^(?:(?:\+?56)?(?:[2-9]\d)\d{7,8})$/i.test(telephone)){
-        throw new Error(`${telephone} must be a chilean number`);
+        throw new Error(`${fieldName} must be a chilean number`);
+    }
+}
+const validateNumber = (numberChar, fieldName) => {
+    if(typeof numberChar !== 'number'){
+        throw new Error(`${fieldName} must be a Number`);
+    }
+}
+const validateMaxNumber = (numberLimit, fieldName) => {
+    if(numberLimit > 20){
+        throw new Error(`${fieldName} must be less than 20`);
     }
 }
 
@@ -131,5 +141,7 @@ module.exports = {
     validateDate,
     validateTaxDocument,
     validateRUT,
-    validateTelephone
+    validateTelephone,
+    validateNumber,
+    validateMaxNumber
 }

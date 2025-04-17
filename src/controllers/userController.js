@@ -86,8 +86,12 @@ const resgisterUser = async (req, res) =>{
 
 const setUserMenu = async (req, res) => {
     const { id, viewID } = req.body;
-    validator.validateFirstName(id);
-    validator.validateViewID(viewID);
+    //Validate User ID
+    validator.validateIsString(id, 'User ID');
+    validator.validateIDStructure(id, 'User ID');
+    //Validate ViewID
+    validator.validateIsString(viewID, 'View ID');
+    validator.validateIDStructure(viewID, 'View ID');
     try {
         const userFilter = { _id : id };
         let menuToPush = viewID;
@@ -106,7 +110,8 @@ const setUserMenu = async (req, res) => {
 
 const changeUserStatus = async (req, res) => {
     const { id } = req.body;
-    validator.validateUserID(id);
+    validator.validateIsString(id, 'User ID');
+    validator.validateIDStructure(id, 'User ID');
     const findedUser = await userModel.findById(id);
     const actualStatus = findedUser.active;
     try {

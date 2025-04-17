@@ -51,7 +51,8 @@ const createViewData = async (req, res) => {
 
 const deleteViewData = async (req, res) => {
     const { viewCode } = req.body;
-    validator.validateViewCode(viewCode);
+    validator.validateIsString(viewCode, 'View Code');
+    validator.validatePermissonCode(viewCode, 'View Code');
     try {
         await viewsModel.deleteOne({_id:viewCode});
         res.status(200).send({msg : "Datos de vista eliminados correctamente"});

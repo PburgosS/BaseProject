@@ -49,6 +49,18 @@ const createContact = async (req, res) => {
 }
 const setContactToNewProvider = async (req, res) =>{
     const { contactId, providerContactEmail, providerContactNumber, providerId } = req.body;
+    //Validate Contact ID
+    validator.validateIsString(contactId, 'Contact ID');
+    validator.validateIDStructure(contactId, 'Contact ID');
+    //Validate Provider Contact ID
+    validator.validateIsString(providerContactEmail, 'Provider Contact Email');
+    validator.validateEmailStructure(providerContactEmail, 'Provider Contact Email');
+    //Validate Provider Contact Number
+    validator.validateIsString(providerContactNumber, 'Provider Contact Number');
+    validator.validateTelephone(providerContactNumber, 'Provider Contact Number');
+    //Validate Provider ID
+    validator.validateIsString(providerId, 'Provider ID');
+    validator.validateIDStructure(providerId, 'Provider ID');
     try {
         await providerContactModel.findOneAndUpdate({_id: contactId},{
             providerContactEmail : providerContactEmail,

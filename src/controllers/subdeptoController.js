@@ -38,7 +38,8 @@ const createSubdepto = async (req, res) => {
 }
 const viewAllSubdeptosOfDepto = async (req, res) => {
     const { deptoLink } = req.body;
-    validator.validateDeptoLink(deptoLink);
+    validator.validateIsString(deptoLink, 'deptoLink');
+    validator.validateIDStructure(deptoLink, 'deptoLink');
     const getSubDeptos = await subdeptoModel.find({deptoLink: deptoLink}, '-__v -deptoLink');
     try {
         res.status(200).send(getSubDeptos);

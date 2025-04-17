@@ -5,8 +5,11 @@ const requestSchema = mongoose.Schema({
         required : true
     },
     requestItems : [{
-        item: String,
-        quantity: Number 
+        product : {
+            type : mongoose.Schema.Types.ObjectId,
+            ref : 'product'
+        },
+        quantity : Number
     }],
     requestDate : {
         type: String,

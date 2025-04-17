@@ -45,6 +45,8 @@ const registerCommune = async (req, res) => {
 } 
 const getAllCommunesOfRegion = async (req, res) => {
     const { regionLink } = req.body;
+    validator.validateIsString(regionLink, 'regionLink');
+    validator.validateIDStructure(regionLink, 'regionLink');
     try {
         const communesOfRegion = await communeModel.find({regionLink : regionLink});
         res.status(200).send(communesOfRegion);
