@@ -13,7 +13,7 @@ const deptosSchema = mongoose.Schema({
     },
     deptoNom : {
         type : String,
-        require : true,
+        required : true,
         unique : true
     }
 });

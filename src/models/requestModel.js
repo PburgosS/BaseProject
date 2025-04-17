@@ -2,19 +2,22 @@ const mongoose = require('mongoose');
 const requestSchema = mongoose.Schema({
     requestor : {
         type: String,
-        require: true
+        required : true
     },
     requestItems : [{
-        item: String,
-        quantity: Number 
+        product : {
+            type : mongoose.Schema.Types.ObjectId,
+            ref : 'product'
+        },
+        quantity : Number
     }],
     requestDate : {
         type: String,
-        require: true
+        required : true
     },
     requestVia : {
         type: String,
-        require: true
+        required : true
     },
     requestStatus: {
         statusName: String,
@@ -32,7 +35,7 @@ const requestSchema = mongoose.Schema({
         },
         finalUserDeptoCode: {
             type : String,
-            require : true
+            required : true
         },
         finalUserSubDepto : {
             type: mongoose.Schema.Types.ObjectId,
@@ -41,7 +44,7 @@ const requestSchema = mongoose.Schema({
     },
     requestID : {
         type : String,
-        require : true,
+        required : true,
         unique : true
     },
     requestorID : {

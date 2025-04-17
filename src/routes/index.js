@@ -12,6 +12,12 @@ const action = require('./action');
 const view = require('./view');
 const request = require('./request');
 const upload = require('./upload');
+const provider = require('./provider');
+const product = require('./product');
+const productBrand = require('./productBrand');
+const productCategory = require('./productCategory');
+const productStatus = require('./productStatus');
+const productArrival = require('./productArrival');
 
 module.exports = {
     home,
@@ -27,5 +33,11 @@ module.exports = {
     action,
     view,
     request,
-    upload
+    upload,
+    provider,
+    product,
+    productBrand,
+    productCategory,
+    productStatus,
+    productArrival
 }
